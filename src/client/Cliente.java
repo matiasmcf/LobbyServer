@@ -192,6 +192,74 @@ public class Cliente {
 	}
 
 	/**
+	 * Solicita la creacion de una sala no protegida.
+	 * 
+	 * @param nombre
+	 */
+	public void crearSala(String nombre) {
+		PaqueteSala paquete = new PaqueteSala(TipoPaquete.CREAR_SALA, nombre);
+		try {
+			outputStream.writeObject(paquete);
+			outputStream.flush();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Solicita la creacion de una sala protegida con contraseña.
+	 * 
+	 * @param nombre
+	 * @param password
+	 */
+	public void crearSala(String nombre, String password) {
+		PaqueteSala paquete = new PaqueteSala(TipoPaquete.CREAR_SALA, nombre, password);
+		try {
+			outputStream.writeObject(paquete);
+			outputStream.flush();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Solicita la creacion de una sala no protegida, con la capacidad maxima especificada.
+	 * 
+	 * @param nombre
+	 * @param capacidad
+	 */
+	public void crearSala(String nombre, int capacidad) {
+		PaqueteSala paquete = new PaqueteSala(TipoPaquete.CREAR_SALA, nombre, capacidad);
+		try {
+			outputStream.writeObject(paquete);
+			outputStream.flush();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Solicita la creacion de una sala protegida con contraseña, con la capacidad maxima especificada.
+	 * 
+	 * @param nombre
+	 * @param capacidad
+	 * @param password
+	 */
+	public void crearSala(String nombre, String password, int capacidad) {
+		PaqueteSala paquete = new PaqueteSala(TipoPaquete.CREAR_SALA, nombre, password, capacidad);
+		try {
+			outputStream.writeObject(paquete);
+			outputStream.flush();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Envia un paquete al servidor, solicitando entrar en la sala seleccionada.
 	 * 
 	 * @see paquetes.PaqueteComunicacion.java

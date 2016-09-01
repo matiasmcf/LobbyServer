@@ -15,5 +15,5 @@ public enum TipoPaquete {
 	// PaqueteSala
 	ABANDONAR_SALA,
 	UNIRSE_A_SALA,
-	CREACION_DE_SALA;
+	CREAR_SALA;
 }

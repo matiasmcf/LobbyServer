@@ -166,13 +166,15 @@ public class Server {
 	}
 
 	/**
-	 * Crea una sala
+	 * Crea una sala con los parametros especificados
 	 * 
 	 * @param nombre
-	 *            de la sala
-	 * @return la sala creada, en caso contrario, devuelve null
+	 * @param password
+	 * @param capacidad
+	 * @param permanente
+	 * @return La sala creada, en caso contrario, devuelve null
 	 */
-	public Sala crearSala(String nombre) {
+	public Sala crearSala(String nombre, String password, int capacidad, boolean permanente) {
 		boolean existe = false;
 		for (Sala s: salas) {
 			if (s.obtenerNombre().equals(nombre)) {
@@ -182,7 +184,11 @@ public class Server {
 		}
 		if (existe)
 			return null;
-		Sala s = new Sala(nombre, Configuracion.MAX_EN_SALA.getValor(), true);
+		Sala s;
+		if (password.equals(""))
+			s = new Sala(nombre, capacidad, permanente);
+		else
+			s = new Sala(nombre, password, capacidad);
 		salas.add(s);
 		return s;
 	}

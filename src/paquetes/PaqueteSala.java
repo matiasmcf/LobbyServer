@@ -49,7 +49,7 @@ public class PaqueteSala extends Paquete {
 		_tipo = tipo;
 		_protegida = false;
 		_capacidad = Configuracion.MAX_DEFAULT.getValor();
-		_password = new String();
+		_password = new String("");
 		// TODO Agregar validacion automatica de tipo de sala, con EXECPTION
 	}
 

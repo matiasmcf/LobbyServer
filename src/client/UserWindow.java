@@ -142,6 +142,16 @@ public class UserWindow extends JFrame {
 		lblCantJugadores = new JLabel("");
 		lblCantJugadores.setBounds(250, 195, 50, 15);
 		contentPane.add(lblCantJugadores);
+
+		JButton buttonCrearSala = new JButton("Crear sala");
+		buttonCrearSala.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent e) {
+				lanzarVentanaCreacionDeSala();
+			}
+		});
+		buttonCrearSala.setBounds(10, 150, 150, 25);
+		contentPane.add(buttonCrearSala);
 		_threadEscucha = new ListenThread();
 		_threadEscucha.start();
 		_cerradoDesdeServer = false;
@@ -155,6 +165,12 @@ public class UserWindow extends JFrame {
 		if (res == JOptionPane.YES_OPTION) {
 			cerrarVentana();
 		}
+	}
+
+	private void lanzarVentanaCreacionDeSala() {
+		this.setVisible(false);
+		CreacionDeSala cs = new CreacionDeSala(this);
+		cs.setVisible(true);
 	}
 
 	public void cerrarVentana() {
@@ -220,6 +236,10 @@ public class UserWindow extends JFrame {
 		_cerradoDesdeServer = true;
 	}
 
+	public void crearSala(String nombre, String password, int capacidad) {
+		cliente.crearSala(nombre, password, capacidad);
+	}
+
 	/**
 	 * Thread que recibe actualizaciones del servidor: creacion/eliminacion de salas
 	 */
@@ -270,6 +290,14 @@ public class UserWindow extends JFrame {
 							running = false;
 							break;
 
+						case CREAR_SALA:
+							pSala = (PaqueteSala) p;
+							if (pSala.getResultado() == false)
+								System.out.println("Motivo: " + pSala.getMensaje());
+							else
+								cliente.entrarEnSala(pSala.getNombre());
+							break;
+
 						case SERVIDOR_CERRADO:
 							pCom = (PaqueteComunicacion) p;
 							System.out.println(pCom.getMensaje());
@@ -293,5 +321,4 @@ public class UserWindow extends JFrame {
 			System.out.println("LISTEN THREAD DENETENIDO");
 		}
 	}
-
 }

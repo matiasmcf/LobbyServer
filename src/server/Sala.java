@@ -16,17 +16,17 @@ public class Sala {
 	private String			_nombre;
 	private String			_contraseña;
 	private boolean			_protegida;
-	private int				_slots;
+	private int				_capacidad;
 	private boolean			_permanente;
 
 	/**
-	 * Crea una sala con chat exclusivo.. Las salas no permanentes seran eliminadas automaticamente al quedar vacias.
+	 * Crea una sala con chat exclusivo. Las salas no permanentes seran eliminadas automaticamente al quedar vacias.
 	 * 
 	 * @param nombre
 	 *            Nombre de la sala.
 	 * @param slots
 	 *            Cantidad de usuarios que pueden entrar en la sala. Un numero menor o igual que 0 (cero) indica que se establecera la cantidad maxima por defecto.
-	 * @param privilegiada
+	 * @param permanente
 	 *            Indica si la sala fue creada por el servidor.
 	 * @see Configuracion.java
 	 */
@@ -35,9 +35,9 @@ public class Sala {
 		_usuarios = new ArrayList<User>();
 		_permanente = permanente;
 		if (slots == 0)
-			_slots = Configuracion.MAX_DEFAULT.getValor();
+			_capacidad = Configuracion.MAX_DEFAULT.getValor();
 		else
-			_slots = slots;
+			_capacidad = slots;
 	}
 
 	/**
@@ -58,9 +58,9 @@ public class Sala {
 		_permanente = false;
 		_usuarios = new ArrayList<User>();
 		if (slots == 0)
-			_slots = Configuracion.MAX_DEFAULT.getValor();
+			_capacidad = Configuracion.MAX_DEFAULT.getValor();
 		else
-			_slots = slots;
+			_capacidad = slots;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class Sala {
 	public Resultado agregarUsuario(User usuario) {
 		if (_protegida == true)
 			return new Resultado(false, "Se requiere una contraseña para acceder a la sala.");
-		if (_usuarios.size() >= _slots)
+		if (_usuarios.size() >= _capacidad)
 			return new Resultado(false, "Superada la cantidad maxima de usuarios permitida en la sala.");
 		if (usuario.getSala() != null)
 			usuario.getSala().removerUsuario(usuario);
@@ -94,7 +94,7 @@ public class Sala {
 	public Resultado agregarUsuario(User usuario, String contraseña) {
 		if (!_contraseña.equals(contraseña))
 			return new Resultado(false, "Contraseña incorrecta.");
-		if (_usuarios.size() >= _slots)
+		if (_usuarios.size() >= _capacidad)
 			return new Resultado(false, "Superada la cantidad maxima de usuarios permitida en la sala.");
 		if (usuario.getSala() != null)
 			usuario.getSala().removerUsuario(usuario);

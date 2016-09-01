@@ -153,6 +153,19 @@ public class ThreadServer extends Thread {
 							}
 							break;
 
+						case CREAR_SALA:
+							paqSala = (PaqueteSala) paquete;
+							Sala sala = servidor.crearSala(paqSala.getNombre(), paqSala.getPassword(), paqSala.getCapacidad(), false);
+							if (sala != null)
+								paqSala.setResultado(true);
+							else {
+								paqSala.setResultado(false);
+								paqSala.setMensaje("No se ha podido crear la sala.");
+							}
+							o.writeObject(paqSala);
+							o.flush();
+							break;
+
 						default:
 							System.out.println("Paquete desconocido.\n");
 							break;

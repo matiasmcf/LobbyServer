@@ -253,7 +253,7 @@ public class ServerWindow extends JFrame {
 		bandera = true;
 		threadEscucha = new ListenThread();
 		threadEscucha.start();
-		salaEspera = servidor.crearSala(Configuracion.SALA_ESPERA.getDescripcion());
+		salaEspera = servidor.crearSala(Configuracion.SALA_ESPERA.getDescripcion(), "", Configuracion.MAX_CLIENTES.getValor(), true);
 		listModelSalas.addElement(salaEspera);
 		System.out.println("SERVIDOR CREADO");
 	}
@@ -316,7 +316,7 @@ public class ServerWindow extends JFrame {
 	 */
 	public void crearSala(String nombre) {
 		if (nombre != null && nombre != "") {
-			Sala s = servidor.crearSala(nombre);
+			Sala s = servidor.crearSala(nombre, "", Configuracion.MAX_CLIENTES.getValor(), true);
 			if (s != null)
 				listModelSalas.addElement(s);
 			else {
@@ -358,7 +358,7 @@ public class ServerWindow extends JFrame {
 		}
 		else {
 			if (s != null)
-				JOptionPane.showMessageDialog(this, "Ingrese un nombre para la partida.", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Ingrese un nombre para la sala.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 	}
