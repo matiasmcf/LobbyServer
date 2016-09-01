@@ -14,7 +14,9 @@ import java.util.Calendar;
 import paquetes.Paquete;
 import paquetes.PaqueteComunicacion;
 import paquetes.PaqueteConexion;
+import paquetes.PaqueteSala;
 import paquetes.TipoPaquete;
+import utils.Resultado;
 
 public class Cliente {
 
@@ -58,10 +60,10 @@ public class Cliente {
 	/**
 	 * Inicia sesion en el servidor
 	 * 
-	 * @return si el inicio de sesion fue exitoso o no.
+	 * @return En caso de error, se adjuntara una descripcion informando la causa del mismo.
+	 * @see Resultado.java
 	 */
-	public boolean iniciarSesion(String user, String pass) {
-		boolean respuesta = false;
+	public Resultado iniciarSesion(String user, String pass) {
 		try {
 			// Datos a enviar
 			PaqueteConexion paquete = new PaqueteConexion(TipoPaquete.LOGIN, user, pass);
@@ -73,10 +75,10 @@ public class Cliente {
 				paquete = (PaqueteConexion) inputStream.readObject();
 				if (paquete.getResultado()) {
 					logged = true;
-					respuesta = true;
+					return new Resultado(true);
 				}
 				else
-					System.out.println(paquete.getMotivo());
+					return new Resultado(false, paquete.getMotivo());
 			}
 			catch (ClassCastException e) {
 				System.out.println("Error: No se recibio un paquete de Login.");
@@ -93,7 +95,8 @@ public class Cliente {
 		catch (ClassNotFoundException e1) {
 			cerrarCliente();
 		}
-		return respuesta;
+		System.out.println("CLIENTE (iniciarSesion): NO SE DEBERIA LLEGAR AQUI");
+		return new Resultado(false, "NO SE DEBERIA LLEGAR AQUI.");
 	}
 
 	/**
@@ -176,7 +179,7 @@ public class Cliente {
 	public void buscarSalas() {
 		try {
 			// Datos a enviar
-			PaqueteComunicacion paquete = new PaqueteComunicacion(TipoPaquete.SOLICITAR_LISTA_LOBBY);
+			PaqueteComunicacion paquete = new PaqueteComunicacion(TipoPaquete.SOLICITUD_LISTA_LOBBY);
 			outputStream.writeObject(paquete);
 			outputStream.flush();
 		}
@@ -196,8 +199,7 @@ public class Cliente {
 	 *            Nombre de la sala a la que se desea entrar
 	 */
 	public void entrarEnSala(String nombre) {
-		PaqueteComunicacion paquete = new PaqueteComunicacion(TipoPaquete.ENTRAR_LOBBY);
-		paquete.setSalaSeleccionada(nombre);
+		PaqueteSala paquete = new PaqueteSala(TipoPaquete.UNIRSE_A_SALA, nombre);
 		try {
 			outputStream.writeObject(paquete);
 			outputStream.flush();
@@ -211,7 +213,7 @@ public class Cliente {
 	 * Indica al servidor que se desea abandonar la sala.
 	 */
 	public void abandonarSala() {
-		PaqueteComunicacion paquete = new PaqueteComunicacion(TipoPaquete.ABANDONAR_LOBBY);
+		PaqueteSala paquete = new PaqueteSala(TipoPaquete.ABANDONAR_SALA);
 		try {
 			outputStream.writeObject(paquete);
 			outputStream.flush();

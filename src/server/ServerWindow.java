@@ -327,7 +327,7 @@ public class ServerWindow extends JFrame {
 	}
 
 	private void enviarListaDeSalas() {
-		PaqueteComunicacion paqComu = new PaqueteComunicacion(TipoPaquete.SOLICITAR_LISTA_LOBBY);
+		PaqueteComunicacion paqComu = new PaqueteComunicacion(TipoPaquete.SOLICITUD_LISTA_LOBBY);
 		paqComu.setListaNombresDeSalas(servidor.getListaNombresDeSalas());
 		for (User u: salaEspera.getUsuarios()) {
 			try {

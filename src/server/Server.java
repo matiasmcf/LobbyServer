@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import database.SQLiteDatabase;
 import utils.Configuracion;
+import utils.Resultado;
 
 /**
  * Objeto que permite aceptar y manejar conexiones
@@ -126,7 +127,8 @@ public class Server {
 			try {
 				usuario.getSocket().close();
 				usuarios.remove(usuario);
-				usuario.getSala().removerUsuario(usuario);
+				if (usuario.getSala() != null)
+					usuario.getSala().removerUsuario(usuario);
 				serverWindow.actualizarListaDeNombres();
 			}
 			catch (IOException e) {
@@ -144,19 +146,23 @@ public class Server {
 	}
 
 	/**
-	 * Agrega un usuario al servidor y lo coloca en la sala de espera
+	 * Agrega un usuario al servidor y lo coloca en la sala de espera.
 	 * 
 	 * @param usuario
-	 * @return si se pudo entrar a la sala de espera o no
+	 * @return En caso de error, se adjuntara una descripcion informando la causa del mismo.
+	 * @see Resultado.java
 	 */
-	public boolean agregarUsuario(User usuario) {
+	public Resultado agregarUsuario(User usuario) {
 		usuarios.add(usuario);
+		if (usuarios.size() > max_clientes) {
+			return new Resultado(false, "El servidor ha alcanzado el limite de clientes conectados.");
+		}
 		for (Sala l: salas) {
 			if (l.obtenerNombre().equals(Configuracion.SALA_ESPERA.getDescripcion())) {
 				return l.agregarUsuario(usuario);
 			}
 		}
-		return false;
+		return new Resultado(false, "No se encuentra la sala de espera.");
 	}
 
 	/**
@@ -176,7 +182,7 @@ public class Server {
 		}
 		if (existe)
 			return null;
-		Sala s = new Sala(nombre, Configuracion.MAX_EN_SALA.getValor());
+		Sala s = new Sala(nombre, Configuracion.MAX_EN_SALA.getValor(), true);
 		salas.add(s);
 		return s;
 	}
@@ -186,6 +192,10 @@ public class Server {
 	 */
 	public ArrayList<User> getListaUsuarios() {
 		return usuarios;
+	}
+
+	public int getCantidadUsuariosConectados() {
+		return usuarios.size();
 	}
 
 	/**
@@ -212,13 +222,13 @@ public class Server {
 	 * 
 	 * @param usuario
 	 * @param sala
-	 * @return true/false si se pudo agregar al usuario o no
+	 * @return En caso de error, se adjuntara una descripcion informando la causa del mismo.
 	 */
-	public boolean agregarASala(User usuario, String sala) {
+	public Resultado agregarASala(User usuario, String sala) {
 		for (Sala s: salas) {
 			if (s.obtenerNombre().equals(sala))
 				return s.agregarUsuario(usuario);
 		}
-		return false;
+		return new Resultado(false, "Sala inexistente.");
 	}
 }

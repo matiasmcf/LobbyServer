@@ -30,7 +30,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import paquetes.Paquete;
 import paquetes.PaqueteComunicacion;
+import paquetes.PaqueteSala;
 
 /**
  * @author Matías
@@ -265,31 +267,36 @@ public class LobbyWindow extends JFrame {
 			running = true;
 			System.out.println("INICIANDO LOBBY THREAD");
 			while (running) {
-				PaqueteComunicacion p = (PaqueteComunicacion) _cliente.recibirPaqueteBloqueante();
+				Paquete p = _cliente.recibirPaqueteBloqueante();
+				PaqueteComunicacion pCom;
+				PaqueteSala pSala;
 				if (p != null) {
 					switch (p.getTipo()) {
 
 						case MENSAJE:
-							textAreaMensajes.append(p.getMensaje());
+							pCom = (PaqueteComunicacion) p;
+							textAreaMensajes.append(pCom.getMensaje());
 							listModelUsuarios.clear();
-							for (String s: p.getListaUsuarios()) {
+							for (String s: pCom.getListaUsuarios()) {
 								listModelUsuarios.addElement(s);
 							}
 							listUsuarios.setSelectedIndex(0);
 							lblCantusuarios.setText(Integer.toString(listModelUsuarios.size() - 1));
 							break;
 
-						case ABANDONAR_LOBBY:
+						case ABANDONAR_SALA:
+							pSala = (PaqueteSala) p;
 							System.out.println("ABANDONANDO LOBBY");
-							if (p.getResultado() == false)
-								System.out.println("Motivo: " + p.getMensaje());
+							if (pSala.getResultado() == false)
+								System.out.println("Motivo: " + pSala.getMensaje());
 							else
 								cerrarVentana();
 							running = false;
 							break;
 
 						case SERVIDOR_CERRADO:
-							System.out.println("SERVIDOR CERRADO");
+							pCom = (PaqueteComunicacion) p;
+							System.out.println(pCom.getMensaje());
 							cerrarVentana();
 							running = false;
 							break;

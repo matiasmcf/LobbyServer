@@ -11,8 +11,10 @@ import database.SQLiteDatabase;
 import paquetes.Paquete;
 import paquetes.PaqueteComunicacion;
 import paquetes.PaqueteConexion;
+import paquetes.PaqueteSala;
 import paquetes.TipoPaquete;
 import utils.Configuracion;
+import utils.Resultado;
 
 public class ThreadServer extends Thread {
 
@@ -36,6 +38,8 @@ public class ThreadServer extends Thread {
 				Paquete paquete = (Paquete) is.readObject();
 				PaqueteConexion paqCon;
 				PaqueteComunicacion paqComu;
+				PaqueteSala paqSala;
+				Resultado r;
 				if (!user.getSocket().isClosed()) {
 					ObjectOutputStream o = user.getOutputStream();
 					// ACCIONES A REALIZAR SEGUN EL TIPO DE PAQUETE RECIBIDO
@@ -47,11 +51,13 @@ public class ThreadServer extends Thread {
 							user.setNombre(paqCon.getNombreUsuario());
 							System.out.println(user.getNombre() + " se ha conectado al servidor");
 							if (database.verificarDatos(paqCon.getNombreUsuario(), paqCon.getPassword())) {
-								if (servidor.agregarUsuario(user))
+								r = servidor.agregarUsuario(user);
+								if (r.getValor())
 									paqCon.setResultado(true);
 								else {
 									paqCon.setResultado(false);
-									paqCon.setMotivo("Servidor/Sala llena");
+									paqCon.setMotivo(r.getMotivo());
+									running = false;
 								}
 							}
 							else {
@@ -81,51 +87,56 @@ public class ThreadServer extends Thread {
 							o.flush();
 							break;
 
-						case SOLICITAR_LISTA_LOBBY:
+						case SOLICITUD_LISTA_LOBBY:
 							paqComu = (PaqueteComunicacion) paquete;
 							paqComu.setListaNombresDeSalas(servidor.getListaNombresDeSalas());
 							o.writeObject(paqComu);
 							o.flush();
 							break;
 
-						case ENTRAR_LOBBY:
-							paqComu = (PaqueteComunicacion) paquete;
-							if (servidor.agregarASala(user, paqComu.getSalaSeleccionada())) {
-								paqComu.setListaNombresDeUsuarios((user.getSala()).getListaNombres());
-								paqComu.setResultado(true);
+						case UNIRSE_A_SALA:
+							paqSala = (PaqueteSala) paquete;
+							r = servidor.agregarASala(user, paqSala.getNombre());
+							if (r.getValor()) {
+								paqSala.setListaNombresDeUsuarios((user.getSala()).getListaNombres());
+								paqSala.setResultado(true);
 							}
 							else {
-								paqComu.setResultado(false);
-								paqComu.setMensaje("Error al unirse a la sala. Sala llena\n");
+								paqSala.setResultado(false);
+								paqSala.setMensaje(r.getMotivo());
 							}
-							o.writeObject(paqComu);
+							o.writeObject(paqSala);
 							o.flush();
 							// Se informa a los demas usuarios de la sala, que alguien ha ingresado a la misma
-							paqComu.setTipo(TipoPaquete.MENSAJE);
-							paqComu.setListaNombresDeUsuarios(user.getSala().getListaNombres());
-							paqComu.setMensaje(new String("***" + user.getNombre() + " ha ingresado a la sala***\n"));
+							paqSala.setTipo(TipoPaquete.MENSAJE);
+							paqSala.setListaNombresDeUsuarios(user.getSala().getListaNombres());
+							paqSala.setMensaje(new String("***" + user.getNombre() + " ha ingresado a la sala***\n"));
 							for (User u: user.getSala().getUsuarios()) {
 								if (u != user) {
-									u.getOutputStream().writeObject(paqComu);
+									u.getOutputStream().writeObject(paqSala);
 									u.getOutputStream().flush();
 								}
 							}
 							break;
 
-						case ABANDONAR_LOBBY:
-							paqComu = (PaqueteComunicacion) paquete;
+						case ABANDONAR_SALA:
+							paqSala = (PaqueteSala) paquete;
 							Sala s = user.getSala();
+							// Se mueve el usuario a la sala de espera
 							servidor.agregarASala(user, Configuracion.SALA_ESPERA.getDescripcion());
+							// En caso de que la sala quede vacia, se verifica si debe eliminarse o no
+							if (s.debeEliminarse())
+								servidor.eliminarSala(s);
 							// Se informa al cliente, que ha salido de la sala correctamente
-							paqComu.setResultado(true);
-							o.writeObject(paqComu);
+							paqSala.setResultado(true);
+							o.writeObject(paqSala);
 							o.flush();
 							// Se informa a los demas usuarios de la sala, que alguien ha salido de la misma
-							paqComu.setTipo(TipoPaquete.MENSAJE);
-							paqComu.setListaNombresDeUsuarios(s.getListaNombres());
-							paqComu.setMensaje(new String("***" + user.getNombre() + " ha abandonado la sala***\n"));
+							paqSala.setTipo(TipoPaquete.MENSAJE);
+							paqSala.setListaNombresDeUsuarios(s.getListaNombres());
+							paqSala.setMensaje(new String("***" + user.getNombre() + " ha abandonado la sala***\n"));
 							for (User u: s.getUsuarios()) {
-								u.getOutputStream().writeObject(paqComu);
+								u.getOutputStream().writeObject(paqSala);
 								u.getOutputStream().flush();
 							}
 							break;

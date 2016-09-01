@@ -42,21 +42,21 @@ public class PaqueteComunicacion extends Paquete {
 
 	/**
 	 * @param resultado
-	 *            -confirmacion o rechazo de la solicitud
+	 *            Confirmacion o rechazo de la solicitud.
 	 */
 	public void setResultado(boolean resultado) {
 		_resultado = resultado;
 	}
 
 	/**
-	 * @return tipo -tipo de paquete/solicitud
+	 * Devuelve el tipo de paquete.
 	 */
 	public TipoPaquete getTipo() {
 		return _tipo;
 	}
 
 	/**
-	 * @return mensaje
+	 * Obtiene el mensaje almacenado en el paquete.
 	 */
 	public String getMensaje() {
 		return _mensaje;
@@ -64,7 +64,7 @@ public class PaqueteComunicacion extends Paquete {
 
 	/**
 	 * @param mensaje
-	 *            -mensaje a enviar
+	 *            Mensaje a enviar.
 	 */
 	public void setMensaje(String mensaje) {
 		_mensaje = mensaje;
@@ -72,7 +72,7 @@ public class PaqueteComunicacion extends Paquete {
 
 	/**
 	 * @param sala
-	 *            -nombre de la sala
+	 *            Nombre de la sala
 	 */
 	public void addSala(String sala) {
 		_salas.add(sala);
@@ -80,7 +80,7 @@ public class PaqueteComunicacion extends Paquete {
 
 	/**
 	 * @param sala
-	 *            -sala a la que se desea entrar
+	 *            Sala a la que se desea entrar
 	 */
 	public void setSalaSeleccionada(String sala) {
 		_salaSeleccionada = sala;
@@ -101,15 +101,8 @@ public class PaqueteComunicacion extends Paquete {
 	}
 
 	/**
-	 * Devuelve un ArrayList conteniendo los nombres de los usuarios en la sala.
-	 */
-	public ArrayList<String> getListaUsuarios() {
-		return _usuarios;
-	}
-
-	/**
 	 * @param sala
-	 *            -nombre de usuario
+	 *            Nombre de usuario
 	 */
 	public void addUsuario(String usuario) {
 		_usuarios.add(usuario);
@@ -119,7 +112,7 @@ public class PaqueteComunicacion extends Paquete {
 	 * Prepara una lista con los nombres de las salas para enviar al usuario.
 	 * 
 	 * @param nombres
-	 *            -ArrayList con los nombres de las salas activas.
+	 *            ArrayList con los nombres de las salas activas.
 	 */
 	public void setListaNombresDeSalas(ArrayList<String> nombres) {
 		_salas = nombres;
@@ -129,10 +122,17 @@ public class PaqueteComunicacion extends Paquete {
 	 * Prepara una lista con los nombres de los usuarios.
 	 * 
 	 * @param nombres
-	 *            -ArrayList con los nombres de los usuarios en la sala.
+	 *            ArrayList con los nombres de los usuarios en la sala.
 	 */
 	public void setListaNombresDeUsuarios(ArrayList<String> nombres) {
 		_usuarios = nombres;
+	}
+
+	/**
+	 * Devuelve un ArrayList conteniendo los nombres de los usuarios en la sala.
+	 */
+	public ArrayList<String> getListaUsuarios() {
+		return _usuarios;
 	}
 
 	/**

@@ -27,6 +27,7 @@ import javax.swing.event.ListSelectionListener;
 import paquetes.Paquete;
 import paquetes.PaqueteComunicacion;
 import paquetes.PaqueteConexion;
+import paquetes.PaqueteSala;
 
 public class UserWindow extends JFrame {
 
@@ -233,10 +234,11 @@ public class UserWindow extends JFrame {
 				Paquete p = cliente.recibirPaqueteBloqueante();
 				PaqueteComunicacion pCom;
 				PaqueteConexion pCon;
+				PaqueteSala pSala;
 				if (p != null) {
 					switch (p.getTipo()) {
 
-						case SOLICITAR_LISTA_LOBBY:
+						case SOLICITUD_LISTA_LOBBY:
 							pCom = (PaqueteComunicacion) p;
 							ArrayList<SimpleImmutableEntry<String, Integer>> salas = new ArrayList<SimpleImmutableEntry<String, Integer>>();
 							for (String s: pCom.getListaSalas()) {
@@ -249,12 +251,12 @@ public class UserWindow extends JFrame {
 							}
 							break;
 
-						case ENTRAR_LOBBY:
-							pCom = (PaqueteComunicacion) p;
-							if (pCom.getResultado() == false)
-								System.out.println("Motivo: " + pCom.getMensaje());
-							if (pCom.getListaUsuarios() != null) {
-								iniciarChat(pCom.getListaUsuarios());
+						case UNIRSE_A_SALA:
+							pSala = (PaqueteSala) p;
+							if (pSala.getResultado() == false)
+								System.out.println("Motivo: " + pSala.getMensaje());
+							if (pSala.getListaUsuarios() != null) {
+								iniciarChat(pSala.getListaUsuarios());
 								running = false;
 							}
 							else
@@ -269,7 +271,8 @@ public class UserWindow extends JFrame {
 							break;
 
 						case SERVIDOR_CERRADO:
-							System.out.println("SERVIDOR CERRADO");
+							pCom = (PaqueteComunicacion) p;
+							System.out.println(pCom.getMensaje());
 							running = false;
 							cerrarVentana();
 							break;

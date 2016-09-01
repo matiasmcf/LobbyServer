@@ -5,11 +5,11 @@ package utils;
  */
 public enum Configuracion {
 	TIEMPO_PARTIDA(60), // En segundos
-	MAX_JUGADORES_PARTIDA(4),
 	PUERTO_INICIAL(5070),
 	RANGO_PUERTOS(50),
-	MAX_CLIENTES(1),
+	MAX_CLIENTES(5),
 	MAX_EN_SALA(3),
+	MAX_DEFAULT(1),
 	SALA_ESPERA("SinAsignar");
 
 	// Nombre de los campos (en orden)
