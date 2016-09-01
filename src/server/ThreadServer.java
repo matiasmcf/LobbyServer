@@ -108,12 +108,12 @@ public class ThreadServer extends Thread {
 							o.writeObject(paqSala);
 							o.flush();
 							// Se informa a los demas usuarios de la sala, que alguien ha ingresado a la misma
-							paqSala.setTipo(TipoPaquete.MENSAJE);
-							paqSala.setListaNombresDeUsuarios(user.getSala().getListaNombres());
-							paqSala.setMensaje(new String("***" + user.getNombre() + " ha ingresado a la sala***\n"));
+							paqComu = new PaqueteComunicacion(TipoPaquete.MENSAJE);
+							paqComu.setListaNombresDeUsuarios(user.getSala().getListaNombres());
+							paqComu.setMensaje(new String("***" + user.getNombre() + " ha ingresado a la sala***\n"));
 							for (User u: user.getSala().getUsuarios()) {
 								if (u != user) {
-									u.getOutputStream().writeObject(paqSala);
+									u.getOutputStream().writeObject(paqComu);
 									u.getOutputStream().flush();
 								}
 							}
@@ -132,11 +132,11 @@ public class ThreadServer extends Thread {
 							o.writeObject(paqSala);
 							o.flush();
 							// Se informa a los demas usuarios de la sala, que alguien ha salido de la misma
-							paqSala.setTipo(TipoPaquete.MENSAJE);
-							paqSala.setListaNombresDeUsuarios(s.getListaNombres());
-							paqSala.setMensaje(new String("***" + user.getNombre() + " ha abandonado la sala***\n"));
+							paqComu = new PaqueteComunicacion(TipoPaquete.MENSAJE);
+							paqComu.setListaNombresDeUsuarios(s.getListaNombres());
+							paqComu.setMensaje(new String("***" + user.getNombre() + " ha abandonado la sala***\n"));
 							for (User u: s.getUsuarios()) {
-								u.getOutputStream().writeObject(paqSala);
+								u.getOutputStream().writeObject(paqComu);
 								u.getOutputStream().flush();
 							}
 							break;

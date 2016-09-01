@@ -53,6 +53,7 @@ public class LobbyWindow extends JFrame {
 	private ListenThread				_threadEscucha;
 	private UserWindow					_userWindow;
 	private Cliente						_cliente;
+	private boolean						_cerradoDesdeServer;
 
 	/**
 	 * Crea una ventana de chat.
@@ -236,6 +237,7 @@ public class LobbyWindow extends JFrame {
 		listUsuarios.setSelectedIndex(0);
 		lblCantusuarios.setText(Integer.toString(listModelUsuarios.size() - 1));
 		labelNombreSala.setText(sala);
+		_cerradoDesdeServer = false;
 		_threadEscucha = new ListenThread();
 		_threadEscucha.start();
 	}
@@ -244,15 +246,16 @@ public class LobbyWindow extends JFrame {
 		int res = JOptionPane.showConfirmDialog(this, "Esta seguro?", "Abandonando sala", JOptionPane.YES_NO_OPTION);
 		if (res == JOptionPane.YES_OPTION) {
 			_cliente.abandonarSala();
-
 		}
 	}
 
 	public void cerrarVentana() {
 		_userWindow.setVisible(true);
 		_userWindow.reiniciarThread();
-		_userWindow.setCerradoDesdeServer();
-		_userWindow.cerrarVentana();
+		if (_cerradoDesdeServer) {
+			_userWindow.setCerradoDesdeServer();
+			_userWindow.cerrarVentana();
+		}
 		this.dispose();
 	}
 
@@ -297,6 +300,7 @@ public class LobbyWindow extends JFrame {
 						case SERVIDOR_CERRADO:
 							pCom = (PaqueteComunicacion) p;
 							System.out.println(pCom.getMensaje());
+							_cerradoDesdeServer = true;
 							cerrarVentana();
 							running = false;
 							break;

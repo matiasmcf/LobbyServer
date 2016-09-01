@@ -15,7 +15,6 @@ public class PaqueteComunicacion extends Paquete {
 	private boolean				_resultado;
 	private ArrayList<String>	_salas;
 	private ArrayList<String>	_usuarios;
-	private String				_salaSeleccionada;
 	private String				_destino;
 
 	/**
@@ -76,21 +75,6 @@ public class PaqueteComunicacion extends Paquete {
 	 */
 	public void addSala(String sala) {
 		_salas.add(sala);
-	}
-
-	/**
-	 * @param sala
-	 *            Sala a la que se desea entrar
-	 */
-	public void setSalaSeleccionada(String sala) {
-		_salaSeleccionada = sala;
-	}
-
-	/**
-	 * Devuelve el nombre de la sala seleccionada por el usuario.
-	 */
-	public String getSalaSeleccionada() {
-		return _salaSeleccionada;
 	}
 
 	/**
