@@ -253,7 +253,7 @@ public class ServerWindow extends JFrame {
 		bandera = true;
 		threadEscucha = new ListenThread();
 		threadEscucha.start();
-		salaEspera = servidor.crearSala("Limbo");
+		salaEspera = servidor.crearSala(Configuracion.SALA_ESPERA.getDescripcion());
 		listModelSalas.addElement(salaEspera);
 		System.out.println("SERVIDOR CREADO");
 	}
@@ -265,6 +265,16 @@ public class ServerWindow extends JFrame {
 			for (User u: servidor.getListaUsuarios()) {
 				u.getThread().pararThread();
 				// TODO informar a los clientes, que el servidor se ha cerrado
+				PaqueteComunicacion p = new PaqueteComunicacion(TipoPaquete.SERVIDOR_CERRADO);
+				p.setMensaje("Servidor cerrado por un administrador.");
+				p.setResultado(true);
+				try {
+					u.getOutputStream().writeObject(p);
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+					System.out.println("Server: exepcion al enviar paquete para desconexion de los clientes.");
+				}
 			}
 			frame.dispose();
 		}

@@ -49,6 +49,7 @@ public class UserWindow extends JFrame {
 	private DefaultListModel<String>										listModelSalas;
 	private ArrayList<AbstractMap.SimpleImmutableEntry<String, Integer>>	datos;
 	private ListenThread													_threadEscucha;
+	private boolean															_cerradoDesdeServer;
 
 	/* UserWindow Constructor */
 	public UserWindow(ClientWindow window, String nombre, Cliente client) {
@@ -142,6 +143,7 @@ public class UserWindow extends JFrame {
 		contentPane.add(lblCantJugadores);
 		_threadEscucha = new ListenThread();
 		_threadEscucha.start();
+		_cerradoDesdeServer = false;
 		cargarControles();
 		cliente.buscarSalas();
 	}
@@ -150,11 +152,18 @@ public class UserWindow extends JFrame {
 	private void confirmarCerrarSesion() {
 		int res = JOptionPane.showConfirmDialog(this, "Esta seguro?", "Cerrando sesion", JOptionPane.YES_NO_OPTION);
 		if (res == JOptionPane.YES_OPTION) {
-			mainWindow.resetUserAndPassword();
-			mainWindow.setVisible(true);
-			cliente.cerrarSesion();
-			this.dispose();
+			cerrarVentana();
 		}
+	}
+
+	public void cerrarVentana() {
+		mainWindow.resetUserAndPassword();
+		mainWindow.setVisible(true);
+		if (!_cerradoDesdeServer)
+			cliente.cerrarSesion();
+		else
+			_threadEscucha.interrupt();
+		this.dispose();
 	}
 
 	public void iniciarChat(ArrayList<String> lista) {
@@ -194,8 +203,20 @@ public class UserWindow extends JFrame {
 		return controles;
 	}
 
+	/**
+	 * Reinicia el thread de escucha
+	 */
+	public void reiniciarThread() {
+		_threadEscucha = new ListenThread();
+		_threadEscucha.start();
+	}
+
 	public Cliente getCliente() {
 		return this.cliente;
+	}
+
+	public void setCerradoDesdeServer() {
+		_cerradoDesdeServer = true;
 	}
 
 	/**
@@ -247,6 +268,12 @@ public class UserWindow extends JFrame {
 							running = false;
 							break;
 
+						case SERVIDOR_CERRADO:
+							System.out.println("SERVIDOR CERRADO");
+							running = false;
+							cerrarVentana();
+							break;
+
 						default:
 							System.out.println("LobbyThread: Tipo de paquete inesperado (" + p.getTipo() + ")");
 							break;
@@ -256,7 +283,8 @@ public class UserWindow extends JFrame {
 					sleep(200);
 				}
 				catch (InterruptedException e) {
-					e.printStackTrace();
+					running = false;
+					System.out.println("UserWindow: thread interrumpido");
 				}
 			}
 			System.out.println("LISTEN THREAD DENETENIDO");

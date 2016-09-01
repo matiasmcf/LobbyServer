@@ -12,6 +12,7 @@ import paquetes.Paquete;
 import paquetes.PaqueteComunicacion;
 import paquetes.PaqueteConexion;
 import paquetes.TipoPaquete;
+import utils.Configuracion;
 
 public class ThreadServer extends Thread {
 
@@ -114,7 +115,7 @@ public class ThreadServer extends Thread {
 						case ABANDONAR_LOBBY:
 							paqComu = (PaqueteComunicacion) paquete;
 							Sala s = user.getSala();
-							servidor.agregarASala(user, "Limbo");
+							servidor.agregarASala(user, Configuracion.SALA_ESPERA.getDescripcion());
 							// Se informa al cliente, que ha salido de la sala correctamente
 							paqComu.setResultado(true);
 							o.writeObject(paqComu);

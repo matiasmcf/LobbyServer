@@ -79,7 +79,7 @@ public class Server {
 	 *            a eliminar
 	 */
 	public boolean eliminarSala(Sala sala) {
-		if (sala.obtenerNombre().equals("Limbo"))
+		if (sala.obtenerNombre().equals(Configuracion.SALA_ESPERA.getDescripcion()))
 			return false;
 		return salas.remove(sala);
 	}
@@ -152,7 +152,7 @@ public class Server {
 	public boolean agregarUsuario(User usuario) {
 		usuarios.add(usuario);
 		for (Sala l: salas) {
-			if (l.obtenerNombre().equals("Limbo")) {
+			if (l.obtenerNombre().equals(Configuracion.SALA_ESPERA.getDescripcion())) {
 				return l.agregarUsuario(usuario);
 			}
 		}
@@ -201,7 +201,7 @@ public class Server {
 	public ArrayList<String> getListaNombresDeSalas() {
 		ArrayList<String> nombres = new ArrayList<String>();
 		for (Sala s: salas) {
-			if (!s.toString().equals("Limbo"))
+			if (!s.toString().equals(Configuracion.SALA_ESPERA.getDescripcion()))
 				nombres.add(s.toString() + " " + s.getCantUsuarios());
 		}
 		return nombres;

@@ -248,6 +248,9 @@ public class LobbyWindow extends JFrame {
 
 	public void cerrarVentana() {
 		_userWindow.setVisible(true);
+		_userWindow.reiniciarThread();
+		_userWindow.setCerradoDesdeServer();
+		_userWindow.cerrarVentana();
 		this.dispose();
 	}
 
@@ -282,6 +285,12 @@ public class LobbyWindow extends JFrame {
 								System.out.println("Motivo: " + p.getMensaje());
 							else
 								cerrarVentana();
+							running = false;
+							break;
+
+						case SERVIDOR_CERRADO:
+							System.out.println("SERVIDOR CERRADO");
+							cerrarVentana();
 							running = false;
 							break;
 
