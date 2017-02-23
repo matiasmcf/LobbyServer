@@ -34,7 +34,7 @@ public class Sala {
 		_nombre = nombre;
 		_usuarios = new ArrayList<User>();
 		_permanente = permanente;
-		if (slots == 0)
+		if (slots <= 0)
 			_capacidad = Configuracion.MAX_DEFAULT.getValor();
 		else
 			_capacidad = slots;
@@ -57,7 +57,7 @@ public class Sala {
 		_protegida = true;
 		_permanente = false;
 		_usuarios = new ArrayList<User>();
-		if (slots == 0)
+		if (slots <= 0)
 			_capacidad = Configuracion.MAX_DEFAULT.getValor();
 		else
 			_capacidad = slots;
