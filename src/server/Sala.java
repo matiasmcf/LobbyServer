@@ -14,7 +14,7 @@ public class Sala {
 
 	private ArrayList<User>	_usuarios;
 	private String			_nombre;
-	private String			_contraseña;
+	private String			_password;
 	private boolean			_protegida;
 	private int				_capacidad;
 	private boolean			_permanente;
@@ -51,9 +51,9 @@ public class Sala {
 	 *            Cantidad de usuarios que pueden entrar en la sala. Un numero menor o igual que 0 (cero) indica que se establecera la cantidad maxima por defecto.
 	 * @see Configuracion.java
 	 */
-	public Sala(String nombre, String contraseña, int slots) {
+	public Sala(String nombre, String password, int slots) {
 		_nombre = nombre;
-		_contraseña = contraseña;
+		_password = password;
 		_protegida = true;
 		_permanente = false;
 		_usuarios = new ArrayList<User>();
@@ -91,8 +91,8 @@ public class Sala {
 	 * @return En caso de error, se adjuntara una descripcion informando la causa del mismo.
 	 * @see Resultado.java
 	 */
-	public Resultado agregarUsuario(User usuario, String contraseña) {
-		if (!_contraseña.equals(contraseña))
+	public Resultado agregarUsuario(User usuario, String password) {
+		if (!_password.equals(password))
 			return new Resultado(false, "Contraseña incorrecta.");
 		if (_usuarios.size() >= _capacidad)
 			return new Resultado(false, "Superada la cantidad maxima de usuarios permitida en la sala.");
