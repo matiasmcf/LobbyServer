@@ -68,7 +68,7 @@ public class ClientWindow extends JFrame {
 				mensajeSalida();
 			}
 		});
-		setTitle("Pac-Man");
+		setTitle("Cliente");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 350, 427);
 		contentPane = new JPanel();
@@ -76,10 +76,10 @@ public class ClientWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblTitle = new JLabel("PAC-MAN");
+		JLabel lblTitle = new JLabel("CLIENTE");
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Sylfaen", Font.PLAIN, 24));
-		lblTitle.setBounds(100, 11, 120, 35);
+		lblTitle.setBounds(100, 11, 144, 35);
 		contentPane.add(lblTitle);
 		JButton btnExit = new JButton("Salir");
 		btnExit.addActionListener(new ActionListener(){
@@ -94,7 +94,7 @@ public class ClientWindow extends JFrame {
 		btnCredits.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, "Grupo 4: \n-Barja, Alex\n-Figueroa, Matias\n-Maidana, Diego\n-Maita, Martin\n-Silva Hernan");
+				JOptionPane.showMessageDialog(frame, "-Figueroa, Matias\n-Maita, Martin");
 			}
 		});
 		btnCredits.setBounds(110, 286, 120, 25);

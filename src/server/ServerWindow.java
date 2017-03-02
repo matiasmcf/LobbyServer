@@ -107,7 +107,7 @@ public class ServerWindow extends JFrame {
 			}
 		});
 
-		setTitle("Server PacMan");
+		setTitle("Server");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 455, 380);
 		contentPane = new JPanel();
@@ -345,7 +345,7 @@ public class ServerWindow extends JFrame {
 	 * Lanza una ventana para el ingreso del nombre de la sala.
 	 */
 	public void ingresarNombreSala() {
-		String s = (String) JOptionPane.showInputDialog(frame, "Ingrese el nombre de la sala:", "Nueva Partida", JOptionPane.PLAIN_MESSAGE, null, null, null);
+		String s = (String)JOptionPane.showInputDialog(frame, "Ingrese el nombre de la sala:", "Nueva Partida", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
 		if ((s != null) && (s.length() > 0)) {
 			if (s.length() > 15) {
