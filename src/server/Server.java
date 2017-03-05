@@ -155,14 +155,14 @@ public class Server {
 	public Resultado agregarUsuario(User usuario) {
 		usuarios.add(usuario);
 		if (usuarios.size() > max_clientes) {
-			return new Resultado(false, "El servidor ha alcanzado el limite de clientes conectados.");
+			return new Resultado("El servidor ha alcanzado el limite de clientes conectados.");
 		}
 		for (Sala l: salas) {
 			if (l.obtenerNombre().equals(Configuracion.SALA_ESPERA.getDescripcion())) {
 				return l.agregarUsuario(usuario);
 			}
 		}
-		return new Resultado(false, "No se encuentra la sala de espera.");
+		return new Resultado("No se encuentra la sala de espera.");
 	}
 
 	/**
@@ -235,6 +235,6 @@ public class Server {
 			if (s.obtenerNombre().equals(sala))
 				return s.agregarUsuario(usuario);
 		}
-		return new Resultado(false, "Sala inexistente.");
+		return new Resultado("Sala inexistente.");
 	}
 }

@@ -4,36 +4,47 @@
 package utils;
 
 /**
- * Clase que permite confirmar o rechazar una accion, indicando ademas, un motivo.
+ * Clase que permite si una accion pudo llevarse a cabo o no, indicando ademas un motivo.
  * 
- * @author Matías
  */
 public class Resultado {
 
 	/** Indica el resultado en si, true o false. **/
 	private boolean	_valor;
 	/** Permite especificar una descripcion detallada en caso de error. **/
-	private String	_motivo;
+	private String	_descripcion;
 
 	/**
 	 * Crea una instancia de la clase para informar que una accion no pudo llevarse a cabo, junto con una descripcion detallada del error.
 	 * 
-	 * @param valor
-	 * @param motivo
+	 * @param descripcion
+	 *            Informacion detallada del error.
 	 */
-	public Resultado(boolean valor, String motivo) {
-		_valor = valor;
-		_motivo = motivo;
+	public Resultado(String descripcion) {
+		_valor = false;
+		_descripcion = descripcion;
 	}
 
 	/**
-	 * Crea una instancia de la clase para informar que una accion se llevo a cabo correctamente.
+	 * Crea una instancia de la clase para informar el resultado de una operacion.
 	 * 
 	 * @param valor
+	 *            Resultado de la operacion.
+	 * 
+	 * @param mensaje
+	 *            Informacion adicional.
 	 */
-	public Resultado(boolean valor) {
+	public Resultado(boolean valor, String mensaje) {
 		_valor = valor;
-		_motivo = new String("Accion exitosa.");
+		_descripcion = mensaje;
+	}
+
+	/**
+	 * Crea una instancia de la clase para informar un resultado exitoso.
+	 */
+	public Resultado() {
+		_valor = true;
+		_descripcion = "Acción exitosa.";
 	}
 
 	/**
@@ -44,9 +55,9 @@ public class Resultado {
 	}
 
 	/**
-	 * Informa el motivo por el que la accion no pudo llevarse a cabo.
+	 * Brinda informacion adicional acerca del resultado.
 	 */
-	public String getMotivo() {
-		return _motivo;
+	public String getDescripcion() {
+		return _descripcion;
 	}
 }

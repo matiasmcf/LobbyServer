@@ -143,7 +143,7 @@ public class ClientWindow extends JFrame {
 						lanzarVentanaUsuario(textFieldNombre.getText());
 					}
 					else {
-						JOptionPane.showMessageDialog(frame, r.getMotivo() + "\nIntentelo nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(frame, r.getDescripcion() + "\nIntentelo nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
 						cliente.cerrarCliente();
 						return;
 					}

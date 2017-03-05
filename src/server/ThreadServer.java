@@ -35,7 +35,7 @@ public class ThreadServer extends Thread {
 		try {
 			ObjectInputStream is = new ObjectInputStream(new DataInputStream(user.getSocket().getInputStream()));
 			while (running) {
-				Paquete paquete = (Paquete) is.readObject();
+				Paquete paquete = (Paquete)is.readObject();
 				PaqueteConexion paqCon;
 				PaqueteComunicacion paqComu;
 				PaqueteSala paqSala;
@@ -47,7 +47,7 @@ public class ThreadServer extends Thread {
 					switch (paquete.getTipo()) {
 
 						case LOGIN:
-							paqCon = (PaqueteConexion) paquete;
+							paqCon = (PaqueteConexion)paquete;
 							user.setNombre(paqCon.getNombreUsuario());
 							System.out.println(user.getNombre() + " se ha conectado al servidor");
 							if (database.verificarDatos(paqCon.getNombreUsuario(), paqCon.getPassword())) {
@@ -56,7 +56,7 @@ public class ThreadServer extends Thread {
 									paqCon.setResultado(true);
 								else {
 									paqCon.setResultado(false);
-									paqCon.setMotivo(r.getMotivo());
+									paqCon.setMotivo(r.getDescripcion());
 									running = false;
 								}
 							}
@@ -69,7 +69,7 @@ public class ThreadServer extends Thread {
 							break;
 
 						case LOGOUT:
-							paqCon = (PaqueteConexion) paquete;
+							paqCon = (PaqueteConexion)paquete;
 							paqCon.setResultado(true);
 							o.writeObject(paqCon);
 							o.flush();
@@ -78,7 +78,7 @@ public class ThreadServer extends Thread {
 							break;
 
 						case REGISTRO:
-							paqCon = (PaqueteConexion) paquete;
+							paqCon = (PaqueteConexion)paquete;
 							paqCon.setResultado(false);
 							user.setNombre(paqCon.getNombreUsuario());
 							paqCon.setResultado(database.registrarUsuario(paqCon.getNombreUsuario(), paqCon.getPassword()));
@@ -88,14 +88,14 @@ public class ThreadServer extends Thread {
 							break;
 
 						case SOLICITUD_LISTA_LOBBY:
-							paqComu = (PaqueteComunicacion) paquete;
+							paqComu = (PaqueteComunicacion)paquete;
 							paqComu.setListaNombresDeSalas(servidor.getListaNombresDeSalas());
 							o.writeObject(paqComu);
 							o.flush();
 							break;
 
 						case UNIRSE_A_SALA:
-							paqSala = (PaqueteSala) paquete;
+							paqSala = (PaqueteSala)paquete;
 							r = servidor.agregarASala(user, paqSala.getNombre());
 							if (r.getValor()) {
 								paqSala.setListaNombresDeUsuarios((user.getSala()).getListaNombres());
@@ -103,7 +103,7 @@ public class ThreadServer extends Thread {
 							}
 							else {
 								paqSala.setResultado(false);
-								paqSala.setMensaje(r.getMotivo());
+								paqSala.setMensaje(r.getDescripcion());
 							}
 							o.writeObject(paqSala);
 							o.flush();
@@ -120,7 +120,7 @@ public class ThreadServer extends Thread {
 							break;
 
 						case ABANDONAR_SALA:
-							paqSala = (PaqueteSala) paquete;
+							paqSala = (PaqueteSala)paquete;
 							Sala s = user.getSala();
 							// Se mueve el usuario a la sala de espera
 							servidor.agregarASala(user, Configuracion.SALA_ESPERA.getDescripcion());
@@ -142,7 +142,7 @@ public class ThreadServer extends Thread {
 							break;
 
 						case MENSAJE:
-							paqComu = (PaqueteComunicacion) paquete;
+							paqComu = (PaqueteComunicacion)paquete;
 							paqComu.setListaNombresDeUsuarios((user.getSala()).getListaNombres());
 							paqComu.setMensaje(new String("[" + user.getNombre() + "]: " + paqComu.getMensaje() + "\n"));
 							for (User u: user.getSala().getUsuarios()) {
@@ -154,7 +154,7 @@ public class ThreadServer extends Thread {
 							break;
 
 						case CREAR_SALA:
-							paqSala = (PaqueteSala) paquete;
+							paqSala = (PaqueteSala)paquete;
 							Sala sala = servidor.crearSala(paqSala.getNombre(), paqSala.getPassword(), paqSala.getCapacidad(), false);
 							if (sala != null)
 								paqSala.setResultado(true);

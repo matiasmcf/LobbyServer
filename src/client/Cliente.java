@@ -72,13 +72,13 @@ public class Cliente {
 			// Datos a recibir
 			inputStream = new ObjectInputStream(new DataInputStream(cliente.getInputStream()));
 			try {
-				paquete = (PaqueteConexion) inputStream.readObject();
+				paquete = (PaqueteConexion)inputStream.readObject();
 				if (paquete.getResultado()) {
 					logged = true;
-					return new Resultado(true);
+					return new Resultado();
 				}
 				else
-					return new Resultado(false, paquete.getMotivo());
+					return new Resultado(paquete.getMotivo());
 			}
 			catch (ClassCastException e) {
 				System.out.println("Error: No se recibio un paquete de Login.");
@@ -96,7 +96,7 @@ public class Cliente {
 			cerrarCliente();
 		}
 		System.out.println("CLIENTE (iniciarSesion): NO SE DEBERIA LLEGAR AQUI");
-		return new Resultado(false, "NO SE DEBERIA LLEGAR AQUI.");
+		return new Resultado("NO SE DEBERIA LLEGAR AQUI.");
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class Cliente {
 			// inputStream = new ObjectInputStream(new
 			// BufferedInputStream(cliente.getInputStream()));
 			try {
-				paquete = (PaqueteConexion) inputStream.readObject();
+				paquete = (PaqueteConexion)inputStream.readObject();
 				if (paquete.getResultado()) {
 					respuesta = true;
 				}
@@ -318,7 +318,7 @@ public class Cliente {
 		try {
 			// TODO Revisar el setSoTimeout. Una vez seteado podría traer conflictos con las llamadas que deben ser bloqueantes.
 			cliente.setSoTimeout(0);
-			Paquete paq = (Paquete) inputStream.readObject();
+			Paquete paq = (Paquete)inputStream.readObject();
 			return paq;
 		}
 		catch (ClassCastException e) {
@@ -342,7 +342,7 @@ public class Cliente {
 		try {
 			// TODO Revisar el setSoTimeout. Una vez seteado podría traer conflictos con las llamadas que deben ser bloqueantes.
 			cliente.setSoTimeout(1000); // TODO verificar este tiempo, posiblemente lo pongamos en una Configuracion
-			Paquete paq = (Paquete) inputStream.readObject();
+			Paquete paq = (Paquete)inputStream.readObject();
 			return paq;
 		}
 		catch (ClassCastException e) {

@@ -8,7 +8,6 @@ import utils.Resultado;
 /**
  * Clase que permite agrupar usuarios e intercambiar mensajes exclusivamente con usuarios del mismo grupo
  * 
- * @author Matías
  */
 public class Sala {
 
@@ -67,18 +66,19 @@ public class Sala {
 	 * Agrega un usuario a la sala
 	 * 
 	 * @param usuario
+	 *            Usuario a agregar.
 	 * @return En caso de error, se adjuntara una descripcion informando la causa del mismo.
 	 */
 	public Resultado agregarUsuario(User usuario) {
 		if (_protegida == true)
-			return new Resultado(false, "Se requiere una contraseña para acceder a la sala.");
+			return new Resultado("Se requiere una contraseña para acceder a la sala.");
 		if (_usuarios.size() >= _capacidad)
-			return new Resultado(false, "Superada la cantidad maxima de usuarios permitida en la sala.");
+			return new Resultado("Superada la cantidad maxima de usuarios permitida en la sala.");
 		if (usuario.getSala() != null)
 			usuario.getSala().removerUsuario(usuario);
 		usuario.setSala(this);
 		_usuarios.add(usuario);
-		return new Resultado(true);
+		return new Resultado();
 	}
 
 	/**
@@ -86,27 +86,28 @@ public class Sala {
 	 * 
 	 * @param usuario
 	 *            Usuario a agregar.
-	 * @param contraseña
-	 *            Contraseña de la sala
+	 * @param password
+	 *            Contraseña de la sala.
 	 * @return En caso de error, se adjuntara una descripcion informando la causa del mismo.
 	 * @see Resultado.java
 	 */
 	public Resultado agregarUsuario(User usuario, String password) {
 		if (!_password.equals(password))
-			return new Resultado(false, "Contraseña incorrecta.");
+			return new Resultado("Contraseña incorrecta.");
 		if (_usuarios.size() >= _capacidad)
-			return new Resultado(false, "Superada la cantidad maxima de usuarios permitida en la sala.");
+			return new Resultado("Superada la cantidad maxima de usuarios permitida en la sala.");
 		if (usuario.getSala() != null)
 			usuario.getSala().removerUsuario(usuario);
 		usuario.setSala(this);
 		_usuarios.add(usuario);
-		return new Resultado(true);
+		return new Resultado();
 	}
 
 	/**
 	 * Elimina un usuario de la sala. Se recomienda revisar la cantidad de usuarios restantes en la sala para decidir si eliminarla o no.
 	 * 
 	 * @param usuario
+	 *            Usuario a remover.
 	 */
 	public void removerUsuario(User usuario) {
 		_usuarios.remove(usuario);
