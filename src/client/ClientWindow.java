@@ -235,7 +235,7 @@ public class ClientWindow extends JFrame {
 	}
 
 	private void mensajeSalida() {
-		int option = JOptionPane.showConfirmDialog(frame, "Esta seguro que quiere salir?", "Saliendo del juego", JOptionPane.YES_NO_OPTION);
+		int option = JOptionPane.showConfirmDialog(frame, "Esta seguro que quiere salir?", "Saliendo del programa", JOptionPane.YES_NO_OPTION);
 		if (option == JOptionPane.YES_OPTION) {
 			if (cliente != null)
 				cliente.cerrarCliente();
